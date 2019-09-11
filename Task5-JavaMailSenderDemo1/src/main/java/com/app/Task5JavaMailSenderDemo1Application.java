@@ -1,14 +1,20 @@
 package com.app;
 
+import java.io.File;
 import java.io.IOException;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 @SpringBootApplication
 public class Task5JavaMailSenderDemo1Application implements CommandLineRunner {
@@ -28,7 +34,8 @@ public class Task5JavaMailSenderDemo1Application implements CommandLineRunner {
 		System.out.println("Sending email....");
 		
 		try {
-			sendEmail();
+			//sendEmail();
+			  sendEmailWithAttachment();
 		}
 		catch(MailException me) {
 			me.printStackTrace();
@@ -52,5 +59,23 @@ public class Task5JavaMailSenderDemo1Application implements CommandLineRunner {
 		System.out.println("Message Sent Successfully..");
 		
 	}//sendEmail
+	
+	public void sendEmailWithAttachment()  throws MessagingException,IOException{
+		
+		MimeMessage message=javaMailSender.createMimeMessage();
+		
+		MimeMessageHelper helper=new  MimeMessageHelper(message, true);
+		
+		helper.setTo("sandiphumbe878@gmail.com");
+		helper.setFrom("sandipsh321@gmail.com");
+		helper.setSubject("JAVA MAIL SENDER DEMO APP WITH ATTACHMENT");
+		helper.setText("<h1>HI Sandip, Welcome to JAVA MAIL LIBRARY..YOU CAN SEND EMAIL TO ANY PERSON BY USING THIS LIBRARY.</h1>",true);
+		
+		helper.addAttachment("dimple.jpg",new ClassPathResource("dimple.jpg"));
+		
+		javaMailSender.send(message);
+		System.out.println("Message Sent Successfully..");
+		
+	}
 
 }//class
